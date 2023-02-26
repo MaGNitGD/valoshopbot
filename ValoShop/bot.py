@@ -131,9 +131,12 @@ async def cmdStart(message: types.Message):
 
             botidCell = 'B' + tgidCell[0][1] # координаты ботид
             regtimeCell = 'C' + tgidCell[0][1] # координаты времени
+            balanceCell = 'D' + tgidCell[0][1] # координаты баланса
             uinf[tgidCell[0]] = username # установка tgid
             uinf[botidCell] = message.from_user.id # установка botid формата [номер][первая буква]
+            uinf[balanceCell] = 17000
             uinf[regtimeCell] = regtime
+
 
             uequip = bd['usersEquipped']
             botidEquip = findCell(uinf[tgidCell[0]].value, 'A', 2, 'users.xlsx', 'usersInfo')
@@ -142,6 +145,7 @@ async def cmdStart(message: types.Message):
             setDefaultSkins(uinf[botidCell].value)
 
             await message.reply(f'Добро пожаловать в ValoShop!\nВы успешно зарегистрировались как {uinf[tgidCell[0]].value}\n\nПомощь - /help')
+            await message.reply(f'Вам начислено 17000 VP')
 
 @disp.message_handler(commands=['profile', 'профиль']) # обработка команды /profile
 async def cmdProfile(message: types.Message):
@@ -155,15 +159,14 @@ async def cmdProfile(message: types.Message):
     else: # если юзер найден
         stats = getUserStats(message.from_user.id)
         await message.reply(f'Профиль пользователя @{tgid}:\n\n'
-                            f'Показатели:\n\n'
+                            f'Показатели:\n'
                             f'Здоровье: {stats[0]}\n'
                             f'Броня: {stats[1]}\n'
                             f'Урон: {stats[2]}\n'
                             f'Меткость: {stats[3]}%\n'
                             f'Шанс попадания в голову: {stats[4]}%\n'
-                            f'Уклонение: {stats[5]}%\n'
-                            
-                            f'\nДата регистрации: {uinf[regtime].value}')
+                            f'Уклонение: {stats[5]}%\n\n'
+                            f'Дата регистрации: {uinf[regtime].value}\n')
 
 @disp.message_handler(commands=['help', 'помощь', 'команды', 'cmd']) # обработка команды /help
 async def cmdHelp(message: types.Message):
@@ -171,7 +174,26 @@ async def cmdHelp(message: types.Message):
 
 @disp.message_handler(commands=['inv', 'inventory', 'инвентарь']) # обработка команды /inventory
 async def cmdInv(message: types.Message):
-    a = 1
+    tgidCell = findCell(message.from_user.id, 'B', 2, 'users.xlsx', 'usersInfo')  # формат переменной [координаты ячейки, содержимое]
+    bd = openpyxl.load_workbook('users.xlsx')
+    uinfo = bd['usersInfo']
+    username = uinfo['A' + tgidCell[0][1]].value
+    botIdCell = findCell(message.from_user.id, 'A', 2, 'users.xlsx', 'usersEquipped')
+    ubd = openpyxl.load_workbook('users.xlsx')
+    sbd = openpyxl.load_workbook('skins.xlsx')
+    ueqip = ubd['usersEquipped']
+    skins = sbd['skins']
+    ke = ueqip['B' + botIdCell[0][1]].value
+    raw = str(int(skins['C' + findCell(ke, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value[2:]) + 2)
+    kestring = [skins['D' + raw].value, skins['A' + raw].value, skins['B' + raw].value]
+    cc = ueqip['C' + botIdCell[0][1]].value
+    raw = str(int(skins['C' + findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value[2:]) + 2)
+    ccstring = [skins['D' + raw].value, skins['A' + raw].value, skins['B' + raw].value]
+    await message.reply(f'Инвентарь {username}:\n'
+                        f'\n'
+                        f'"{kestring[2][:-1]}" {kestring[1]} | +{kestring[0]} хп\n'
+                        f'"{ccstring[2][:-1]}" {kestring[1]} | +{kestring[0]} урона\n'
+                        f'')
 
 
 
