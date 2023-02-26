@@ -68,22 +68,49 @@ def getUserStats(botId):
     ueqip = ubd['usersEquipped']
     skins = sbd['skins']
     ke = ueqip['B' + botIdCell[0][1]].value
+    ke = skins['D' + findCell(ke, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
     bg = ueqip['N' + botIdCell[0][1]].value
+    bg = skins['D' + findCell(bg, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
     gn = ueqip['O' + botIdCell[0][1]].value
-    hp = skins['D' + findCell(ke, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(bg, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + (skins['D' + findCell(ke, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(bg, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value)/100*skins['D' + findCell(gn, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    gn = skins['D' + findCell(gn, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    hp = ke + bg + (ke + bg)/100*gn
     fy = ueqip['E' + botIdCell[0][1]].value
+    fy = skins['D' + findCell(fy, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
     ass = ueqip['K' + botIdCell[0][1]].value
+    ass = skins['D' + findCell(ass, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
     on = ueqip['R' + botIdCell[0][1]].value
-    armor = skins['D' + findCell(fy, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(ass, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + (skins['D' + findCell(fy, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(ass, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value)/100*skins['D' + findCell(on, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    on = skins['D' + findCell(on, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    armor = fy + ass + (fy + ass)/100*on
     cc = ueqip['C' + botIdCell[0][1]].value
-    a = findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]
+    cc = skins['D' + findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
     sr = ueqip['J' + botIdCell[0][1]].value
+    sr = skins['D' + findCell(sr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
     vl = ueqip['Q' + botIdCell[0][1]].value
-    damage = skins['D' + findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(sr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + (skins['D' + findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(sr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value)/100*skins['D' + findCell(vl, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    vl = skins['D' + findCell(vl, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    damage = cc + sr + (cc + sr)/100*vl
+    sf = ueqip['G' + botIdCell[0][1]].value
+    sf = skins['D' + findCell(sf, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    ml = ueqip['I' + botIdCell[0][1]].value
+    ml = skins['D' + findCell(ml, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    orr = ueqip['S' + botIdCell[0][1]].value
+    orr = skins['D' + findCell(orr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    accuracy = sf + orr + (sf+orr)/100*ml
+    gt = ueqip['F' + botIdCell[0][1]].value
+    gt = skins['D' + findCell(gt, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    se = ueqip['L' + botIdCell[0][1]].value
+    se = skins['D' + findCell(se, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    pm = ueqip['P' + botIdCell[0][1]].value
+    pm = skins['D' + findCell(pm, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    hs = gt + pm + (gt + pm)/100*se
+    sy = ueqip['D' + botIdCell[0][1]].value
+    sy = skins['D' + findCell(sy, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    by = ueqip['H' + botIdCell[0][1]].value
+    by = skins['D' + findCell(by, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    je = ueqip['M' + botIdCell[0][1]].value
+    je = skins['D' + findCell(je, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    dodge = sy + je + (sy + je)/100*by
 
-
-
-    return hp, armor, damage
+    return hp, armor, damage, accuracy, hs, dodge
 
 @disp.message_handler(commands=['start', 'старт']) #обработчик команды /start
 async def cmdStart(message: types.Message):
@@ -132,9 +159,9 @@ async def cmdProfile(message: types.Message):
                             f'Здоровье: {stats[0]}\n'
                             f'Броня: {stats[1]}\n'
                             f'Урон: {stats[2]}\n'
-                            f'Меткость:\n'
-                            f'Шанс попадания в голову:\n'
-                            f'Уклонение:\n'
+                            f'Меткость: {stats[3]}%\n'
+                            f'Шанс попадания в голову: {stats[4]}%\n'
+                            f'Уклонение: {stats[5]}%\n'
                             
                             f'\nДата регистрации: {uinf[regtime].value}')
 
