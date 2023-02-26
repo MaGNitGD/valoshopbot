@@ -67,16 +67,15 @@ async def cmdStart(message: types.Message):
         uinf = bd['usersInfo']  # выбираю лист usersInfo
         regtime = f'{datetime.datetime.now().day}.{datetime.datetime.now().month}.{datetime.datetime.now().year}' # дата рег-ции [17 02 2023]
 
+
         tgidCell = findCell(message.from_user.id, 'B', 2) # формат переменной [координаты ячейки, содержимое]
         tgidCell[0] = 'A' + tgidCell[0][1]
-        botidCell = 'B' + str(int(tgidCell[0][1])-1)  # координаты ботид
+        botidCell = 'B' + (tgidCell[0][1])  # координаты ботид
         username = message.from_user.username
         if message.from_user.username is None:
-            username = message.from_user.first_name + str(int(tgidCell[0][1])-1)
-            tgidCell = findCell(username, 'A', 2)  # формат переменной [координаты ячейки, содержимое]
-            botidCell = 'B' + tgidCell[0][1]  # координаты ботид
+            username = message.from_user.first_name + str(int(tgidCell[0][1]) - 1)
         if uinf[botidCell].value == message.from_user.id: # если уже зарегестрирован
-            await message.reply(f'Вы уже зарегистрированы как {tgidCell[1]}')
+            await message.reply(f'Вы уже зарегистрированы как {uinf["A" + tgidCell[0][1]].value}')
         elif tgidCell[1] == True: # регистрация
 
             botidCell = 'B' + tgidCell[0][1] # координаты ботид
@@ -97,12 +96,13 @@ async def cmdStart(message: types.Message):
 async def cmdProfile(message: types.Message):
     bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
     uinf = bd['usersInfo']  # выбираю лист usersInfo
-    tgid = findCell(message.from_user.username, 'A', 2) # поиск юзера в базе
-    regtime = 'C' + tgid[0][1] # ячейка для даты
-    if tgid[1] == True: # если юзер найден
+    botid = findCell(message.from_user.id, 'B', 2) # поиск юзера в базе
+    tgid = uinf['A' + botid[0][1]].value
+    regtime = 'C' + botid[0][1] # ячейка для даты
+    if botid[1] == True: # если юзер не зареган
         await message.reply('Вы ещё не зарегистрированы. Для регистрации введите /start')
-    else: # если юзер не зареган
-        await message.reply(f'Профиль пользователя @{tgid[1]}:\n\nДата регистрации: {uinf[regtime].value}')
+    else: # если юзер найден
+        await message.reply(f'Профиль пользователя @{tgid}:\n\nДата регистрации: {uinf[regtime].value}')
 
 @disp.message_handler(commands=['help', 'помощь', 'команды', 'cmd']) # обработка команды /help
 async def cmdHelp(message: types.Message):
