@@ -17,7 +17,7 @@ disp = Dispatcher(bot=bot)
 def findCell(value, column, raw):
     bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
     uinf = bd['usersInfo']  # выбираю лист usersInfo
-    i = 1  # образ raw в цикле
+    i = raw  # образ raw в цикле
     currentCell = column + str(raw) # определяю проверяему ячейку
     currentCellValue = uinf[currentCell].value # определяю значение проверяемой ячейки
     none = False # пустая ли ячейка?
@@ -67,19 +67,22 @@ async def cmdStart(message: types.Message):
         uinf = bd['usersInfo']  # выбираю лист usersInfo
         regtime = f'{datetime.datetime.now().day}.{datetime.datetime.now().month}.{datetime.datetime.now().year}' # дата рег-ции [17 02 2023]
 
-        tgidCell = findCell(message.from_user.username, 'A', 2) # формат переменной [координаты ячейки, содержимое]
+        tgidCell = findCell(message.from_user.id, 'B', 2) # формат переменной [координаты ячейки, содержимое]
+        tgidCell[0] = 'A' + tgidCell[0][1]
+        botidCell = 'B' + str(int(tgidCell[0][1])-1)  # координаты ботид
         username = message.from_user.username
         if message.from_user.username is None:
             username = message.from_user.first_name + str(int(tgidCell[0][1])-1)
             tgidCell = findCell(username, 'A', 2)  # формат переменной [координаты ячейки, содержимое]
-        if tgidCell[1] == username: # если уже зарегестрирован
+            botidCell = 'B' + tgidCell[0][1]  # координаты ботид
+        if uinf[botidCell].value == message.from_user.id: # если уже зарегестрирован
             await message.reply(f'Вы уже зарегистрированы как {tgidCell[1]}')
         elif tgidCell[1] == True: # регистрация
 
             botidCell = 'B' + tgidCell[0][1] # координаты ботид
             regtimeCell = 'C' + tgidCell[0][1] # координаты времени
             uinf[tgidCell[0]] = username # установка tgid
-            uinf[botidCell] = str(int(tgidCell[0][1])-1) + uinf[tgidCell[0]].value[0] # установка botid формата [номер][первая буква]
+            uinf[botidCell] = message.from_user.id # установка botid формата [номер][первая буква]
             uinf[regtimeCell] = regtime
 
             uequip = bd['usersEquipped']
