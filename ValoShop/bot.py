@@ -68,15 +68,17 @@ async def cmdStart(message: types.Message):
         regtime = f'{datetime.datetime.now().day}.{datetime.datetime.now().month}.{datetime.datetime.now().year}' # дата рег-ции [17 02 2023]
 
         tgidCell = findCell(message.from_user.username, 'A', 2) # формат переменной [координаты ячейки, содержимое]
-        if tgidCell is None:
-
-        elif tgidCell[1] == message.from_user.username: # если уже зарегестрирован
+        username = message.from_user.username
+        if message.from_user.username is None:
+            username = message.from_user.first_name + str(int(tgidCell[0][1])-1)
+            tgidCell = findCell(username, 'A', 2)  # формат переменной [координаты ячейки, содержимое]
+        if tgidCell[1] == username: # если уже зарегестрирован
             await message.reply(f'Вы уже зарегистрированы как {tgidCell[1]}')
         elif tgidCell[1] == True: # регистрация
 
             botidCell = 'B' + tgidCell[0][1] # координаты ботид
             regtimeCell = 'C' + tgidCell[0][1] # координаты времени
-            uinf[tgidCell[0]] = message.from_user.username # установка tgid
+            uinf[tgidCell[0]] = username # установка tgid
             uinf[botidCell] = str(int(tgidCell[0][1])-1) + uinf[tgidCell[0]].value[0] # установка botid формата [номер][первая буква]
             uinf[regtimeCell] = regtime
 
