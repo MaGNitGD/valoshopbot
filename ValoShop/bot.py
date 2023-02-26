@@ -14,9 +14,9 @@ logging.basicConfig(level=logging.INFO) #сбор логов (куда?)
 bot = Bot(token=API_TOKEN)
 disp = Dispatcher(bot=bot)
 
-def findCell(value, column, raw):
-    bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
-    uinf = bd['usersInfo']  # выбираю лист usersInfo
+def findCell(value, column, raw, bdin, uinfin):
+    bd = openpyxl.load_workbook(bdin)  # открываю бд
+    uinf = bd[uinfin]  # выбираю лист usersInfo
     i = raw  # образ raw в цикле
     currentCell = column + str(raw) # определяю проверяему ячейку
     currentCellValue = uinf[currentCell].value # определяю значение проверяемой ячейки
@@ -28,17 +28,17 @@ def findCell(value, column, raw):
         currentCellValue = uinf[currentCell].value  # определяю значение проверяемой ячейки
         if currentCellValue == value: # если ячейка найдена
             x = 1 # отключение while
-            bd.save('users.xlsx')
+            bd.save(bdin)
             return [currentCell, currentCellValue] # координаты ячейки и её значение
         elif uinf[currentCell].value is None: # если ячейки нет
             none = True
-            bd.save('users.xlsx')
+            bd.save(bdin)
             return [currentCell, none] # координаты ячеёки и ин-я, что она пуста
         else:
             i += 1
 
 def setDefaultSkins(botId):
-    botidCell = findCell(botId, 'A', 1)
+    botidCell = findCell(botId, 'A', 1, 'users.xlsx', 'usersInfo')
     bd = openpyxl.load_workbook('users.xlsx')
     ueqiup = bd['usersEquipped']
     ueqiup['B' + str(int(botidCell[0][1]) - 1)] = 'ke0'
@@ -61,6 +61,30 @@ def setDefaultSkins(botId):
     ueqiup['S' + str(int(botidCell[0][1]) - 1)] = 'or0'
     bd.save('users.xlsx')
 
+def getUserStats(botId):
+    botIdCell = findCell(botId, 'A', 2, 'users.xlsx', 'usersEquipped')
+    ubd = openpyxl.load_workbook('users.xlsx')
+    sbd = openpyxl.load_workbook('skins.xlsx')
+    ueqip = ubd['usersEquipped']
+    skins = sbd['skins']
+    ke = ueqip['B' + botIdCell[0][1]].value
+    bg = ueqip['N' + botIdCell[0][1]].value
+    gn = ueqip['O' + botIdCell[0][1]].value
+    hp = skins['D' + findCell(ke, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(bg, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + (skins['D' + findCell(ke, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(bg, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value)/100*skins['D' + findCell(gn, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    fy = ueqip['E' + botIdCell[0][1]].value
+    ass = ueqip['K' + botIdCell[0][1]].value
+    on = ueqip['R' + botIdCell[0][1]].value
+    armor = skins['D' + findCell(fy, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(ass, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + (skins['D' + findCell(fy, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(ass, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value)/100*skins['D' + findCell(on, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    cc = ueqip['C' + botIdCell[0][1]].value
+    a = findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]
+    sr = ueqip['J' + botIdCell[0][1]].value
+    vl = ueqip['Q' + botIdCell[0][1]].value
+    damage = skins['D' + findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(sr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + (skins['D' + findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value + skins['D' + findCell(sr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value)/100*skins['D' + findCell(vl, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+
+
+
+    return hp, armor, damage
+
 @disp.message_handler(commands=['start', 'старт']) #обработчик команды /start
 async def cmdStart(message: types.Message):
         bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
@@ -68,7 +92,7 @@ async def cmdStart(message: types.Message):
         regtime = f'{datetime.datetime.now().day}.{datetime.datetime.now().month}.{datetime.datetime.now().year}' # дата рег-ции [17 02 2023]
 
 
-        tgidCell = findCell(message.from_user.id, 'B', 2) # формат переменной [координаты ячейки, содержимое]
+        tgidCell = findCell(message.from_user.id, 'B', 2, 'users.xlsx', 'usersInfo') # формат переменной [координаты ячейки, содержимое]
         tgidCell[0] = 'A' + tgidCell[0][1]
         botidCell = 'B' + (tgidCell[0][1])  # координаты ботид
         username = message.from_user.username
@@ -85,7 +109,7 @@ async def cmdStart(message: types.Message):
             uinf[regtimeCell] = regtime
 
             uequip = bd['usersEquipped']
-            botidEquip = findCell(uinf[tgidCell[0]].value, 'A', 2)
+            botidEquip = findCell(uinf[tgidCell[0]].value, 'A', 2, 'users.xlsx', 'usersInfo')
             uequip[botidEquip[0]] = uinf[botidCell].value
             bd.save('users.xlsx') # сохранение бд
             setDefaultSkins(uinf[botidCell].value)
@@ -96,13 +120,23 @@ async def cmdStart(message: types.Message):
 async def cmdProfile(message: types.Message):
     bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
     uinf = bd['usersInfo']  # выбираю лист usersInfo
-    botid = findCell(message.from_user.id, 'B', 2) # поиск юзера в базе
+    botid = findCell(message.from_user.id, 'B', 2, 'users.xlsx', 'usersInfo') # поиск юзера в базе
     tgid = uinf['A' + botid[0][1]].value
     regtime = 'C' + botid[0][1] # ячейка для даты
     if botid[1] == True: # если юзер не зареган
         await message.reply('Вы ещё не зарегистрированы. Для регистрации введите /start')
     else: # если юзер найден
-        await message.reply(f'Профиль пользователя @{tgid}:\n\nДата регистрации: {uinf[regtime].value}')
+        stats = getUserStats(message.from_user.id)
+        await message.reply(f'Профиль пользователя @{tgid}:\n\n'
+                            f'Показатели:\n\n'
+                            f'Здоровье: {stats[0]}\n'
+                            f'Броня: {stats[1]}\n'
+                            f'Урон: {stats[2]}\n'
+                            f'Меткость:\n'
+                            f'Шанс попадания в голову:\n'
+                            f'Уклонение:\n'
+                            
+                            f'\nДата регистрации: {uinf[regtime].value}')
 
 @disp.message_handler(commands=['help', 'помощь', 'команды', 'cmd']) # обработка команды /help
 async def cmdHelp(message: types.Message):
