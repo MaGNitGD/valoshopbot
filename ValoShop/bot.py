@@ -275,8 +275,6 @@ async def cmdInv(message: types.Message):
     raw = findCell(orr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]
     orrstring = [skins['D' + raw].value, skins['A' + raw].value, skins['B' + raw].value]
 
-    skinChangeCmd = [kestring[1], ccstring[1], systring[1], fystring[1], gtstring[1], sfstring[1], bystring[1], mlstring[1], srstring[1], assstring[1], sestring[1], jestring[1], bgstring[1], gnstring[1], pmstring[1], vlstring[1], onstring[1], orrstring[1]]
-
     await message.reply(f'Инвентарь {username}:\n'
                         f'\n'
                         f'"{kestring[2]}" /{kestring[1]} | {kestring[0]} здоровья\n'
@@ -300,8 +298,33 @@ async def cmdInv(message: types.Message):
 
 @disp.message_handler(commands=["Ares", "Bulldog", "Bucky", "Classic", "Frenzy", "Guardian", "Ghost", "Judge", "Knife", "Axe", "Baton", "Energy", "Candy", "Fan", "Electroblade", "Ritual", "Crescent", "Butterfly", "Sword", "Balisong", "Baseball", "Shock", "Wand", "Melee", "Firefly", "Mace", "Anchor", "Karambit", "Hammer", "Dagger", "Scythe", "Impact", "Harvester", "Marshal", "Odin", "Operator", "Phantom", "Spectre", "Sheriff", "Stinger", "Shorty", "Vandal"])
 async def cmdChangeSkin(message: types.Message):
-    a = 1
+    if isRegistered(message.from_user.id) == False:
+        await message.reply('Вы ещё не зарегистрированы. Для регистрации введите /start')
+        return
+    ubd = openpyxl.load_workbook('users.xlsx')
+    uinf = ubd['usersInfo']
+    sbd = openpyxl.load_workbook('skins.xlsx')
+    skins = sbd['skins']
 
+    botId = message.from_user.id
+    botIdCell = 'E' + findCell(botId, 'B', 1, 'users.xlsx', 'usersInfo')[0][1:]
+    uinv = uinf[botIdCell].value.split(', ')
+
+    melee = ["Knife", "Axe", "Baton", "Energy", "Candy", "Fan", "Electroblade", "Ritual", "Crescent", "Butterfly", "Sword", "Balisong", "Baseball", "Shock", "Wand", "Melee", "Firefly", "Mace", "Anchor", "Karambit", "Hammer", "Dagger", "Scythe", "Impact", "Harvester"]
+    uke = []
+    msg = []
+
+    if message.text[1:] in melee:
+        for i in range(0,len(uinv)):
+            if 'ke' in uinv[i]:
+                uke.append(uinv[i])
+                i+=1
+            else: i+=1
+        for i in range(0, len(uke)):
+            if
+            meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} здоровья\n'
+            msg.append(meleeStr)
+        await  message.reply('Ваши скины на оружие ближнего боя:\n\n' + ''.join(msg))
 
 
 if __name__ == '__main__':
