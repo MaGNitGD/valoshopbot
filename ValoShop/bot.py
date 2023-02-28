@@ -44,7 +44,7 @@ def setDefaultSkins(botId):
     bd = openpyxl.load_workbook('users.xlsx')
     ueqiup = bd['usersEquipped']
     ueqiup['B' + str(int(botidCell[0][1]) - 1)] = 'ke0'
-    ueqiup['C' + str(int(botidCell[0][1]) - 1)] = 'сс0'
+    ueqiup['C' + str(int(botidCell[0][1]) - 1)] = 'cc0'
     ueqiup['D' + str(int(botidCell[0][1]) - 1)] = 'sy0'
     ueqiup['E' + str(int(botidCell[0][1]) - 1)] = 'fy0'
     ueqiup['F' + str(int(botidCell[0][1]) - 1)] = 'gt0'
@@ -69,50 +69,47 @@ def getUserStats(botId):
     sbd = openpyxl.load_workbook('skins.xlsx')
     ueqip = ubd['usersEquipped']
     skins = sbd['skins']
-    ke = ueqip['B' + botIdCell[0][1]].value
-    ke = skins['D' + findCell(ke, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    bg = ueqip['N' + botIdCell[0][1]].value
-    bg = skins['D' + findCell(bg, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    gn = ueqip['O' + botIdCell[0][1]].value
-    gn = skins['D' + findCell(gn, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    hp = ke + bg + (ke + bg)/100*gn
-    fy = ueqip['E' + botIdCell[0][1]].value
-    fy = skins['D' + findCell(fy, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    ass = ueqip['K' + botIdCell[0][1]].value
-    ass = skins['D' + findCell(ass, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    on = ueqip['R' + botIdCell[0][1]].value
-    on = skins['D' + findCell(on, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    armor = fy + ass + (fy + ass)/100*on
-    cc = ueqip['C' + botIdCell[0][1]].value
-    cc = skins['D' + findCell(cc, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    sr = ueqip['J' + botIdCell[0][1]].value
-    sr = skins['D' + findCell(sr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    vl = ueqip['Q' + botIdCell[0][1]].value
-    vl = skins['D' + findCell(vl, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    damage = cc + sr + (cc + sr)/100*vl
-    sf = ueqip['G' + botIdCell[0][1]].value
-    sf = skins['D' + findCell(sf, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    ml = ueqip['I' + botIdCell[0][1]].value
-    ml = skins['D' + findCell(ml, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    orr = ueqip['S' + botIdCell[0][1]].value
-    orr = skins['D' + findCell(orr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    accuracy = sf + orr + (sf+orr)/100*ml
-    gt = ueqip['F' + botIdCell[0][1]].value
-    gt = skins['D' + findCell(gt, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    se = ueqip['L' + botIdCell[0][1]].value
-    se = skins['D' + findCell(se, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    pm = ueqip['P' + botIdCell[0][1]].value
-    pm = skins['D' + findCell(pm, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    hs = gt + pm + (gt + pm)/100*se
-    sy = ueqip['D' + botIdCell[0][1]].value
-    sy = skins['D' + findCell(sy, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    by = ueqip['H' + botIdCell[0][1]].value
-    by = skins['D' + findCell(by, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
-    je = ueqip['M' + botIdCell[0][1]].value
-    je = skins['D' + findCell(je, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+
+    ke = skins['D' + findCell(ueqip['B' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    bg = skins['D' + findCell(ueqip['N' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    gn = skins['D' + findCell(ueqip['O' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    hp = ke + bg + (ke + bg) / 100 * gn
+
+    fy = skins['D' + findCell(ueqip['E' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    ass = skins['D' + findCell(ueqip['K' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    on = skins['D' + findCell(ueqip['R' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    armor = fy + ass + (fy + ass) / 100 * on
+
+    cc = skins['D' + findCell(ueqip['C' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    sr = skins['D' + findCell(ueqip['J' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    vl = skins['D' + findCell(ueqip['Q' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    damage = cc + sr + (cc + sr) / 100 * vl
+
+    sf = skins['D' + findCell(ueqip['G' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    ml = skins['D' + findCell(ueqip['I' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    orr = skins['D' + findCell(ueqip['S' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    accuracy = sf + orr + (sf + orr) / 100 * ml
+
+    gt = skins['D' + findCell(ueqip['F' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    se = skins['D' + findCell(ueqip['L' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    pm = skins['D' + findCell(ueqip['P' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    hs = gt + pm + (gt + pm) / 100 * se
+
+    sy = skins['D' + findCell(ueqip['D' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    by = skins['D' + findCell(ueqip['H' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
+    je = skins['D' + findCell(ueqip['M' + botIdCell[0][1]].value, 'C', 1, 'skins.xlsx', 'skins')[0][1:]].value
     dodge = sy + je + (sy + je)/100*by
 
     return hp, armor, damage, accuracy, hs, dodge
+
+def isRegistered(botId):
+    bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
+    uinf = bd['usersInfo']  # выбираю лист usersInfo
+    botid = findCell(botId, 'B', 2, 'users.xlsx', 'usersInfo')  # поиск юзера в базе
+    if botid[1] == True:  # если юзер не зареган
+        return False
+    else:
+        return True
 
 @disp.message_handler(commands=['start', 'старт']) #обработчик команды /start
 async def cmdStart(message: types.Message):
@@ -147,12 +144,20 @@ async def cmdStart(message: types.Message):
             bd.save('users.xlsx') # сохранение бд
             setDefaultSkins(uinf[botidCell].value) # установка дефолтных скинов пользователю
 
+            bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
+            uinf = bd['usersInfo']
+            uequip = bd['usersEquipped']
+            botidEquip = findCell(uinf[tgidCell[0]].value, 'A', 2, 'users.xlsx', 'usersInfo')
+
             fullinv = [] #ke = ueqip['B' + botIdCell[0][1]].value
             for i in range(1, 19):
-                fullinv.append(uequip['B' + botidEquip[0][1]].value)
+                column = columns[i]
+                fullinv.append(uequip[column + botidEquip[0][1]].value)
+            uinf[fullinvCell].value = ', '.join(fullinv)
+            bd.save('users.xlsx')
 
             await message.reply(f'Добро пожаловать в ValoShop!\nВы успешно зарегистрировались как {uinf[tgidCell[0]].value}\n\nПомощь - /help')
-            await message.reply(f'Вам начислено 17000 VP')
+            await bot.send_message(text = f'Вам начислено 17000 VP', chat_id=message.from_user.id)
 
 @disp.message_handler(commands=['profile', 'профиль']) # обработка команды /profile
 async def cmdProfile(message: types.Message):
@@ -181,6 +186,10 @@ async def cmdHelp(message: types.Message):
 
 @disp.message_handler(commands=['inv', 'inventory', 'инвентарь']) # обработка команды /inventory
 async def cmdInv(message: types.Message):
+
+    if isRegistered(message.from_user.id) == False:
+        await message.reply('Вы ещё не зарегистрированы. Для регистрации введите /start')
+        return
     tgidCell = findCell(message.from_user.id, 'B', 2, 'users.xlsx', 'usersInfo')  # формат переменной [координаты ячейки, содержимое]
 
     bd = openpyxl.load_workbook('users.xlsx')
@@ -266,26 +275,32 @@ async def cmdInv(message: types.Message):
     raw = findCell(orr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]
     orrstring = [skins['D' + raw].value, skins['A' + raw].value, skins['B' + raw].value]
 
+    skinChangeCmd = [kestring[1], ccstring[1], systring[1], fystring[1], gtstring[1], sfstring[1], bystring[1], mlstring[1], srstring[1], assstring[1], sestring[1], jestring[1], bgstring[1], gnstring[1], pmstring[1], vlstring[1], onstring[1], orrstring[1]]
+
     await message.reply(f'Инвентарь {username}:\n'
                         f'\n'
-                        f'"{kestring[2]}" {kestring[1]} | {kestring[0]} здоровья\n'
-                        f'"{ccstring[2]}" {ccstring[1]} | {ccstring[0]} урона\n'
-                        f'"{systring[2]}" {systring[1]} | {systring[0]}% шанс уклонения\n'
-                        f'"{fystring[2]}" {fystring[1]} | {fystring[0]} брони\n'
-                        f'"{gtstring[2]}" {gtstring[1]} | {gtstring[0]}% шанс попадания в голову\n'
-                        f'"{sfstring[2]}" {sfstring[1]} | {sfstring[0]}% меткости\n'
-                        f'"{bystring[2]}" {bystring[1]} | шанс уклонения увеличен на {bystring[0]}%\n'
-                        f'"{mlstring[2]}" {mlstring[1]} | меткость увеличена на {mlstring[0]}%\n'
-                        f'"{srstring[2]}" {srstring[1]} | к урону добавлено {srstring[0]} ед.\n'
-                        f'"{assstring[2]}" {assstring[1]} | к броне добавлено {assstring[0]} ед.\n'
-                        f'"{sestring[2]}" {sestring[1]} | шанс попадания в голову увеличен на {sestring[0]}%\n'
-                        f'"{jestring[2]}" {jestring[1]} | к уклонению добавлено {jestring[0]}%\n'
-                        f'"{bgstring[2]}" {bgstring[1]} | к здоровью добавлено {bgstring[0]} ед.\n'
-                        f'"{gnstring[2]}" {gnstring[1]} | здоровье увеличено на {gnstring[0]}%\n'
-                        f'"{pmstring[2]}" {pmstring[1]} | к шансу попадания в голову добавлено {pmstring[0]}%\n'
-                        f'"{vlstring[2]}" {vlstring[1]} | урон увеличен на {vlstring[0]}%\n'
-                        f'"{onstring[2]}" {onstring[1]} | броня увеличена на {onstring[0]}%\n'
-                        f'"{orrstring[2]}" {orrstring[1]} | к меткости добавлено {orrstring[0]}%\n')
+                        f'"{kestring[2]}" /{kestring[1]} | {kestring[0]} здоровья\n'
+                        f'"{ccstring[2]}" /{ccstring[1]} | {ccstring[0]} урона\n'
+                        f'"{systring[2]}" /{systring[1]} | {systring[0]}% шанс уклонения\n'
+                        f'"{fystring[2]}" /{fystring[1]} | {fystring[0]} брони\n'
+                        f'"{gtstring[2]}" /{gtstring[1]} | {gtstring[0]}% шанс попадания в голову\n'
+                        f'"{sfstring[2]}" /{sfstring[1]} | {sfstring[0]}% меткости\n'
+                        f'"{bystring[2]}" /{bystring[1]} | шанс уклонения увеличен на {bystring[0]}%\n'
+                        f'"{mlstring[2]}" /{mlstring[1]} | меткость увеличена на {mlstring[0]}%\n'
+                        f'"{srstring[2]}" /{srstring[1]} | к урону добавлено {srstring[0]} ед.\n'
+                        f'"{assstring[2]}" /{assstring[1]} | к броне добавлено {assstring[0]} ед.\n'
+                        f'"{sestring[2]}" /{sestring[1]} | шанс попадания в голову увеличен на {sestring[0]}%\n'
+                        f'"{jestring[2]}" /{jestring[1]} | к уклонению добавлено {jestring[0]}%\n'
+                        f'"{bgstring[2]}" /{bgstring[1]} | к здоровью добавлено {bgstring[0]} ед.\n'
+                        f'"{gnstring[2]}" /{gnstring[1]} | здоровье увеличено на {gnstring[0]}%\n'
+                        f'"{pmstring[2]}" /{pmstring[1]} | к шансу попадания в голову добавлено {pmstring[0]}%\n'
+                        f'"{vlstring[2]}" /{vlstring[1]} | урон увеличен на {vlstring[0]}%\n'
+                        f'"{onstring[2]}" /{onstring[1]} | броня увеличена на {onstring[0]}%\n'
+                        f'"{orrstring[2]}" /{orrstring[1]} | к меткости добавлено {orrstring[0]}%\n')
+
+@disp.message_handler(commands=["Ares", "Bulldog", "Bucky", "Classic", "Frenzy", "Guardian", "Ghost", "Judge", "Knife", "Axe", "Baton", "Energy", "Candy", "Fan", "Electroblade", "Ritual", "Crescent", "Butterfly", "Sword", "Balisong", "Baseball", "Shock", "Wand", "Melee", "Firefly", "Mace", "Anchor", "Karambit", "Hammer", "Dagger", "Scythe", "Impact", "Harvester", "Marshal", "Odin", "Operator", "Phantom", "Spectre", "Sheriff", "Stinger", "Shorty", "Vandal"])
+async def cmdChangeSkin(message: types.Message):
+    a = 1
 
 
 
