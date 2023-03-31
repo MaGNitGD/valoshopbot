@@ -182,7 +182,8 @@ async def cmdProfile(message: types.Message):
 
 @disp.message_handler(commands=['help', 'помощь', 'команды', 'cmd']) # обработка команды /help
 async def cmdHelp(message: types.Message):
-    await message.reply(f'Команды бота:\n\n/start - Регистрация\n/profile - Профиль\n/help - Помощь\n/inv - инвентарь\n{"_"*23}\nСоздатель: @magnitgd')
+    kb = types.ReplyKeyboardMarkup(keyboard=types.KeyboardButton(text='/помощь'), resize_keyboard=True)
+    await message.reply(f'Команды бота:\n\n/start - Регистрация\n/profile - Профиль\n/help - Помощь\n/inv - инвентарь\n{"_"*23}\nСоздатель: @magnitgd', reply_markup=kb)
 
 @disp.message_handler(commands=['inv', 'inventory', 'инвентарь']) # обработка команды /inventory
 async def cmdInv(message: types.Message):
