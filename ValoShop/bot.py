@@ -1,11 +1,13 @@
 import time
 import logging
 import datetime
-
-import aiogram
 import openpyxl
+import asyncio
 
-from aiogram import Bot, Dispatcher, executor, types
+from aiogram import Bot, Dispatcher, types, F
+from aiogram.filters.command import Command
+from aiogram.filters import Text
+from aiogram.types import InputTextMessageContent, InlineQueryResultArticle
 
 
 API_TOKEN = '5819234032:AAFxPINrKJkPokcnwpI2hPDk_bacvLyUhnc' #токен бота
@@ -111,7 +113,10 @@ def isRegistered(botId):
     else:
         return True
 
-@disp.message_handler(commands=['start', 'старт']) #обработчик команды /start
+
+async def main():
+    await disp.start_polling(bot)
+@disp.message(Text(['старт', '/start'])) #обработчик команды /start
 async def cmdStart(message: types.Message):
         bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
         uinf = bd['usersInfo']  # выбираю лист usersInfo
@@ -159,7 +164,7 @@ async def cmdStart(message: types.Message):
             await message.reply(f'Добро пожаловать в ValoShop!\nВы успешно зарегистрировались как {uinf[tgidCell[0]].value}\n\nПомощь - /help')
             await bot.send_message(text = f'Вам начислено 17000 VP', chat_id=message.from_user.id)
 
-@disp.message_handler(commands=['profile', 'профиль']) # обработка команды /profile
+@disp.message(Text(['Профиль', 'профиль'])) # обработка команды /profile
 async def cmdProfile(message: types.Message):
     bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
     uinf = bd['usersInfo']  # выбираю лист usersInfo
@@ -180,12 +185,13 @@ async def cmdProfile(message: types.Message):
                             f'Уклонение: {stats[5]}%\n\n'
                             f'Дата регистрации: {uinf[regtime].value}\n')
 
-@disp.message_handler(commands=['help', 'помощь', 'команды', 'cmd']) # обработка команды /help
+@disp.message(Text(['Помощь', 'помощь'])) # обработка команды /help
 async def cmdHelp(message: types.Message):
-    kb = types.ReplyKeyboardMarkup(keyboard=types.KeyboardButton(text='/помощь'), resize_keyboard=True)
-    await message.reply(f'Команды бота:\n\n/start - Регистрация\n/profile - Профиль\n/help - Помощь\n/inv - инвентарь\n{"_"*23}\nСоздатель: @magnitgd', reply_markup=kb)
+    kb = [[types.KeyboardButton(text='/помощь')], [types.KeyboardButton(text='/профиль')]]
+    keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True, input_field_placeholder='Команды')
+    await message.reply(f'Команды бота:\n\n/start - Регистрация\n/profile - Профиль\n/help - Помощь\n/inv - инвентарь\n{"_"*23}\nСоздатель: @magnitgd', reply_markup=keyboard)
 
-@disp.message_handler(commands=['inv', 'inventory', 'инвентарь']) # обработка команды /inventory
+@disp.message(Text(['inv', 'Inv', 'инвентарь'])) # обработка команды /inventory
 async def cmdInv(message: types.Message):
 
     if isRegistered(message.from_user.id) == False:
@@ -297,7 +303,7 @@ async def cmdInv(message: types.Message):
                         f'"{onstring[2]}" /{onstring[1]} | броня увеличена на {onstring[0]}%\n'
                         f'"{orrstring[2]}" /{orrstring[1]} | к меткости добавлено {orrstring[0]}%\n')
 
-@disp.message_handler(commands=["Ares", "Bulldog", "Bucky", "Classic", "Frenzy", "Guardian", "Ghost", "Judge", "Knife", "Axe", "Baton", "Energy", "Candy", "Fan", "Electroblade", "Ritual", "Crescent", "Butterfly", "Sword", "Balisong", "Baseball", "Shock", "Wand", "Melee", "Firefly", "Mace", "Anchor", "Karambit", "Hammer", "Dagger", "Scythe", "Impact", "Harvester", "Marshal", "Odin", "Operator", "Phantom", "Spectre", "Sheriff", "Stinger", "Shorty", "Vandal"])
+@disp.message(Command(["Ares", "Bulldog", "Bucky", "Classic", "Frenzy", "Guardian", "Ghost", "Judge", "Knife", "Axe", "Baton", "Energy", "Candy", "Fan", "Electroblade", "Ritual", "Crescent", "Butterfly", "Sword", "Balisong", "Baseball", "Shock", "Wand", "Melee", "Firefly", "Mace", "Anchor", "Karambit", "Hammer", "Dagger", "Scythe", "Impact", "Harvester", "Marshal", "Odin", "Operator", "Phantom", "Spectre", "Sheriff", "Stinger", "Shorty", "Vandal"], prefix='/'))
 async def cmdChangeSkin(message: types.Message):
     if isRegistered(message.from_user.id) == False:
         await message.reply('Вы ещё не зарегистрированы. Для регистрации введите /start')
@@ -460,5 +466,7 @@ async def cmdChangeSkin(message: types.Message):
                 meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | Урон увеличен на {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
                 msg.append(meleeStr)
             await  message.reply('Ваши скины на Vandal:\n\n' + ''.join(msg))
-if __name__ == '__main__':
-    executor.start_polling(disp)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
