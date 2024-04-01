@@ -1,11 +1,17 @@
 import time
 import logging
 import datetime
-
-import aiogram
 import openpyxl
+import asyncio
 
-from aiogram import Bot, Dispatcher, executor, types
+<<<<<<< Updated upstream
+from aiogram import Bot, Dispatcher, types, F
+from aiogram.filters.command import Command
+from aiogram.filters import Text
+from aiogram.types import InputTextMessageContent, InlineQueryResultArticle
+=======
+from aiogram import Bot, Dispatcher, types
+>>>>>>> Stashed changes
 
 
 API_TOKEN = '5819234032:AAFxPINrKJkPokcnwpI2hPDk_bacvLyUhnc' #токен бота
@@ -111,7 +117,14 @@ def isRegistered(botId):
     else:
         return True
 
-@disp.message_handler(commands=['start', 'старт']) #обработчик команды /start
+<<<<<<< Updated upstream
+
+async def main():
+    await disp.start_polling(bot)
+@disp.message(Text(['старт', '/start'])) #обработчик команды /start
+=======
+@disp.message(commands=['start', 'старт']) #обработчик команды /start
+>>>>>>> Stashed changes
 async def cmdStart(message: types.Message):
         bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
         uinf = bd['usersInfo']  # выбираю лист usersInfo
@@ -159,7 +172,11 @@ async def cmdStart(message: types.Message):
             await message.reply(f'Добро пожаловать в ValoShop!\nВы успешно зарегистрировались как {uinf[tgidCell[0]].value}\n\nПомощь - /help')
             await bot.send_message(text = f'Вам начислено 17000 VP', chat_id=message.from_user.id)
 
-@disp.message_handler(commands=['profile', 'профиль']) # обработка команды /profile
+<<<<<<< Updated upstream
+@disp.message(Text(['Профиль', 'профиль'])) # обработка команды /profile
+=======
+@disp.message(commands=['profile', 'профиль']) # обработка команды /profile
+>>>>>>> Stashed changes
 async def cmdProfile(message: types.Message):
     bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
     uinf = bd['usersInfo']  # выбираю лист usersInfo
@@ -180,11 +197,21 @@ async def cmdProfile(message: types.Message):
                             f'Уклонение: {stats[5]}%\n\n'
                             f'Дата регистрации: {uinf[regtime].value}\n')
 
-@disp.message_handler(commands=['help', 'помощь', 'команды', 'cmd']) # обработка команды /help
+<<<<<<< Updated upstream
+@disp.message(Text(['Помощь', 'помощь'])) # обработка команды /help
+=======
+@disp.message(commands=['help', 'помощь', 'команды', 'cmd']) # обработка команды /help
+>>>>>>> Stashed changes
 async def cmdHelp(message: types.Message):
-    await message.reply(f'Команды бота:\n\n/start - Регистрация\n/profile - Профиль\n/help - Помощь\n/inv - инвентарь\n{"_"*23}\nСоздатель: @magnitgd')
+    kb = [[types.KeyboardButton(text='/помощь')], [types.KeyboardButton(text='/профиль')]]
+    keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True, input_field_placeholder='Команды')
+    await message.reply(f'Команды бота:\n\n/start - Регистрация\n/profile - Профиль\n/help - Помощь\n/inv - инвентарь\n{"_"*23}\nСоздатель: @magnitgd', reply_markup=keyboard)
 
-@disp.message_handler(commands=['inv', 'inventory', 'инвентарь']) # обработка команды /inventory
+<<<<<<< Updated upstream
+@disp.message(Text(['inv', 'Inv', 'инвентарь'])) # обработка команды /inventory
+=======
+@disp.message(commands=['inv', 'inventory', 'инвентарь']) # обработка команды /inventory
+>>>>>>> Stashed changes
 async def cmdInv(message: types.Message):
 
     if isRegistered(message.from_user.id) == False:
@@ -275,8 +302,6 @@ async def cmdInv(message: types.Message):
     raw = findCell(orr, 'C', 1, 'skins.xlsx', 'skins')[0][1:]
     orrstring = [skins['D' + raw].value, skins['A' + raw].value, skins['B' + raw].value]
 
-    skinChangeCmd = [kestring[1], ccstring[1], systring[1], fystring[1], gtstring[1], sfstring[1], bystring[1], mlstring[1], srstring[1], assstring[1], sestring[1], jestring[1], bgstring[1], gnstring[1], pmstring[1], vlstring[1], onstring[1], orrstring[1]]
-
     await message.reply(f'Инвентарь {username}:\n'
                         f'\n'
                         f'"{kestring[2]}" /{kestring[1]} | {kestring[0]} здоровья\n'
@@ -298,11 +323,176 @@ async def cmdInv(message: types.Message):
                         f'"{onstring[2]}" /{onstring[1]} | броня увеличена на {onstring[0]}%\n'
                         f'"{orrstring[2]}" /{orrstring[1]} | к меткости добавлено {orrstring[0]}%\n')
 
-@disp.message_handler(commands=["Ares", "Bulldog", "Bucky", "Classic", "Frenzy", "Guardian", "Ghost", "Judge", "Knife", "Axe", "Baton", "Energy", "Candy", "Fan", "Electroblade", "Ritual", "Crescent", "Butterfly", "Sword", "Balisong", "Baseball", "Shock", "Wand", "Melee", "Firefly", "Mace", "Anchor", "Karambit", "Hammer", "Dagger", "Scythe", "Impact", "Harvester", "Marshal", "Odin", "Operator", "Phantom", "Spectre", "Sheriff", "Stinger", "Shorty", "Vandal"])
+@disp.message(Command(["Ares", "Bulldog", "Bucky", "Classic", "Frenzy", "Guardian", "Ghost", "Judge", "Knife", "Axe", "Baton", "Energy", "Candy", "Fan", "Electroblade", "Ritual", "Crescent", "Butterfly", "Sword", "Balisong", "Baseball", "Shock", "Wand", "Melee", "Firefly", "Mace", "Anchor", "Karambit", "Hammer", "Dagger", "Scythe", "Impact", "Harvester", "Marshal", "Odin", "Operator", "Phantom", "Spectre", "Sheriff", "Stinger", "Shorty", "Vandal"], prefix='/'))
 async def cmdChangeSkin(message: types.Message):
-    a = 1
+    if isRegistered(message.from_user.id) == False:
+        await message.reply('Вы ещё не зарегистрированы. Для регистрации введите /start')
+        return
+    ubd = openpyxl.load_workbook('users.xlsx')
+    uinf = ubd['usersInfo']
+    sbd = openpyxl.load_workbook('skins.xlsx')
+    skins = sbd['skins']
+
+    botId = message.from_user.id
+    botIdCell = 'E' + findCell(botId, 'B', 1, 'users.xlsx', 'usersInfo')[0][1:]
+    uinv = uinf[botIdCell].value.split(', ')
+
+    melee = ["Knife", "Axe", "Baton", "Energy", "Candy", "Fan", "Electroblade", "Ritual", "Crescent", "Butterfly", "Sword", "Balisong", "Baseball", "Shock", "Wand", "Melee", "Firefly", "Mace", "Anchor", "Karambit", "Hammer", "Dagger", "Scythe", "Impact", "Harvester"]
+    uke = []
+    msg = []
+    print(message.text[1:] + "!")
+    if message.text[1:] in melee:
+        for i in range(0,len(uinv)):
+            if 'ke' in uinv[i]:
+                uke.append(uinv[i])
+        for i in range(0, len(uke)):
+            meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} здоровья\n'
+            msg.append(meleeStr)
+        await  message.reply('Ваши скины на оружие ближнего боя:\n\n' + ''.join(msg))
+    match message.text[1:]:
+        case 'Ares':
+            for i in range(0, len(uinv)):
+                if 'as' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | К броне добавлено {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} ед.\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Ares:\n\n' + ''.join(msg))
+        case 'Bulldog':
+            for i in range(0, len(uinv)):
+                if 'bg' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | К здоровью добавлено {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} ед.\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Bulldog:\n\n' + ''.join(msg))
+        case 'Bucky':
+            for i in range(0, len(uinv)):
+                if 'by' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | Шанс уклонения увеличен на {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Bucky:\n\n' + ''.join(msg))
+        case 'Classic':
+            for i in range(0, len(uinv)):
+                if 'cc' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} урона\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Classic:\n\n' + ''.join(msg))
+        case 'Frenzy':
+            for i in range(0, len(uinv)):
+                if 'fy' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} брони\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Frenzy:\n\n' + ''.join(msg))
+        case 'Guardian':
+            for i in range(0, len(uinv)):
+                if 'gn' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | Здоровье увеличено на {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Guardian:\n\n' + ''.join(msg))
+        case 'Ghost':
+            for i in range(0, len(uinv)):
+                if 'gt' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}% шанс попадания в голову\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Ghost:\n\n' + ''.join(msg))
+        case 'Judge':
+            for i in range(0, len(uinv)):
+                if 'je' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | К уклонению добавлено {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Judge:\n\n' + ''.join(msg))
+        case 'Marshal':
+            for i in range(0, len(uinv)):
+                if 'ml' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | Меткость увеличена на {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Marshal:\n\n' + ''.join(msg))
+        case 'Odin':
+            for i in range(0, len(uinv)):
+                if 'on' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | Броня увеличена на {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Odin:\n\n' + ''.join(msg))
+        case 'Operator':
+            for i in range(0, len(uinv)):
+                if 'or' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | К меткости добавлено {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Operator:\n\n' + ''.join(msg))
+        case 'Phantom':
+            for i in range(0, len(uinv)):
+                if 'pm' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | К шансу попадания в голову добавлено {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Phantom:\n\n' + ''.join(msg))
+        case 'Sheriff':
+            for i in range(0, len(uinv)):
+                if 'sf' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}% меткости\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Sheriff:\n\n' + ''.join(msg))
+        case 'Shorty':
+            for i in range(0, len(uinv)):
+                if 'sy' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}% шанс уклонения\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Shorty:\n\n' + ''.join(msg))
+        case 'Spectre':
+            for i in range(0, len(uinv)):
+                if 'se' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | Шанс попадания в голову увеличен на {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Spectre:\n\n' + ''.join(msg))
+        case 'Stinger':
+            for i in range(0, len(uinv)):
+                if 'sr' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | К урону добавлено {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} ед.\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Stinger:\n\n' + ''.join(msg))
+        case 'Vandal':
+            for i in range(0, len(uinv)):
+                if 'vl' in uinv[i]:
+                    uke.append(uinv[i])
+            for i in range(0, len(uke)):
+                meleeStr = f'"{skins["B" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}" {skins["A" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value} | Урон увеличен на {skins["D" + findCell(uke[i], "C", 1, "skins.xlsx", "skins")[0][1:]].value}%\n'
+                msg.append(meleeStr)
+            await  message.reply('Ваши скины на Vandal:\n\n' + ''.join(msg))
 
 
+<<<<<<< Updated upstream
+if __name__ == "__main__":
+    asyncio.run(main())
+=======
 
 if __name__ == '__main__':
-    executor.start_polling(disp)
+    disp.start_polling()
+>>>>>>> Stashed changes
