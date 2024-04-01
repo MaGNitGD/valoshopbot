@@ -4,10 +4,14 @@ import datetime
 import openpyxl
 import asyncio
 
+<<<<<<< Updated upstream
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters.command import Command
 from aiogram.filters import Text
 from aiogram.types import InputTextMessageContent, InlineQueryResultArticle
+=======
+from aiogram import Bot, Dispatcher, types
+>>>>>>> Stashed changes
 
 
 API_TOKEN = '5819234032:AAFxPINrKJkPokcnwpI2hPDk_bacvLyUhnc' #токен бота
@@ -113,10 +117,14 @@ def isRegistered(botId):
     else:
         return True
 
+<<<<<<< Updated upstream
 
 async def main():
     await disp.start_polling(bot)
 @disp.message(Text(['старт', '/start'])) #обработчик команды /start
+=======
+@disp.message(commands=['start', 'старт']) #обработчик команды /start
+>>>>>>> Stashed changes
 async def cmdStart(message: types.Message):
         bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
         uinf = bd['usersInfo']  # выбираю лист usersInfo
@@ -164,7 +172,11 @@ async def cmdStart(message: types.Message):
             await message.reply(f'Добро пожаловать в ValoShop!\nВы успешно зарегистрировались как {uinf[tgidCell[0]].value}\n\nПомощь - /help')
             await bot.send_message(text = f'Вам начислено 17000 VP', chat_id=message.from_user.id)
 
+<<<<<<< Updated upstream
 @disp.message(Text(['Профиль', 'профиль'])) # обработка команды /profile
+=======
+@disp.message(commands=['profile', 'профиль']) # обработка команды /profile
+>>>>>>> Stashed changes
 async def cmdProfile(message: types.Message):
     bd = openpyxl.load_workbook('users.xlsx')  # открываю бд
     uinf = bd['usersInfo']  # выбираю лист usersInfo
@@ -185,13 +197,21 @@ async def cmdProfile(message: types.Message):
                             f'Уклонение: {stats[5]}%\n\n'
                             f'Дата регистрации: {uinf[regtime].value}\n')
 
+<<<<<<< Updated upstream
 @disp.message(Text(['Помощь', 'помощь'])) # обработка команды /help
+=======
+@disp.message(commands=['help', 'помощь', 'команды', 'cmd']) # обработка команды /help
+>>>>>>> Stashed changes
 async def cmdHelp(message: types.Message):
     kb = [[types.KeyboardButton(text='/помощь')], [types.KeyboardButton(text='/профиль')]]
     keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True, input_field_placeholder='Команды')
     await message.reply(f'Команды бота:\n\n/start - Регистрация\n/profile - Профиль\n/help - Помощь\n/inv - инвентарь\n{"_"*23}\nСоздатель: @magnitgd', reply_markup=keyboard)
 
+<<<<<<< Updated upstream
 @disp.message(Text(['inv', 'Inv', 'инвентарь'])) # обработка команды /inventory
+=======
+@disp.message(commands=['inv', 'inventory', 'инвентарь']) # обработка команды /inventory
+>>>>>>> Stashed changes
 async def cmdInv(message: types.Message):
 
     if isRegistered(message.from_user.id) == False:
@@ -468,5 +488,11 @@ async def cmdChangeSkin(message: types.Message):
             await  message.reply('Ваши скины на Vandal:\n\n' + ''.join(msg))
 
 
+<<<<<<< Updated upstream
 if __name__ == "__main__":
     asyncio.run(main())
+=======
+
+if __name__ == '__main__':
+    disp.start_polling()
+>>>>>>> Stashed changes
